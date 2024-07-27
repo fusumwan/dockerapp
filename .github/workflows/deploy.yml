@@ -42,8 +42,27 @@ jobs:
         username: ${{ secrets.SERVER_USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
-          sudo apt-get update
-          sudo apt-get install -y docker.io
+          # Check the OS and install Docker accordingly
+          if [ -f /etc/os-release ]; then
+            . /etc/os-release
+            if [ "$ID" = "ubuntu" ] || [ "$ID" = "debian" ]; then
+              sudo apt-get update
+              sudo apt-get install -y docker.io
+            elif [ "$ID" = "amzn" ] || [ "$ID" = "centos" ] || [ "$ID" = "rhel" ]; then
+              sudo yum update -y
+              sudo yum install -y docker
+              sudo service docker start
+            else
+              echo "Unsupported OS: $ID"
+              exit 1
+            fi
+          else
+            echo "Unable to determine OS"
+            exit 1
+          fi
+          sudo usermod -aG docker $USER
+          sudo systemctl start docker
+          sudo systemctl enable docker
           docker pull ${{ secrets.DOCKER_USERNAME }}/dockerapp:latest
           docker stop dockerapp || true
           docker rm dockerapp || true

@@ -8,6 +8,7 @@ on:
 jobs:
   build-test-deploy:
     runs-on: self-hosted
+      labels: runner1
 
     steps:
       - name: Checkout Code

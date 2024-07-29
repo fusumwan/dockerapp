@@ -245,6 +245,51 @@ Using your self-hosted runner
 runs-on: self-hosted
 
 =============================
+icacls "C:\WebDevelopment\WorkspaceDocker\DockerCompose\KeyPair\runner1.pem" /inheritance:r /grant:r "$($env:USERNAME):(R)"
+
+
+ssh -i "runner1.pem" ec2-user@ec2-3-27-85-64.ap-southeast-2.compute.amazonaws.com
+
+sudo yum update -y
+sudo yum install libicu -y
+sudo yum install -y perl-Digest-SHA
+shasum --version
+
+sudo yum install nginx
+
+===========================
+check the docker wether is running or not
+
+List Running Docker Containers:
+
+
+docker ps
+
+List All Docker Containers:
+
+If you want to see all containers, including those that are stopped, use the following command:
+docker ps -a
+
+
+List Docker Images:
+
+docker images
+
+==========================
+List All Docker Containers:
+docker ps -a
+Stop and Remove the Container:
+
+docker stop 12b8fe471ef2
+docker rm 12b8fe471ef2
+
+List Docker Images:
+docker images
+
+Remove the Image:
+docker rmi 3e22f153b3e9
+
+=============================
 …or create a new repository on the command line
 echo "# cicd-pipeline" >> README.md
 git init
